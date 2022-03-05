@@ -1,3 +1,4 @@
+from posixpath import join
 import numpy as np
 
 # Please implement the predict() method of this class
@@ -18,13 +19,26 @@ class KNNModel:
 
     # TODO: Implement this method!
     def predict(self, X_pred):
-        # The code in this method should be removed and replaced! We included it
-        # just so that the distribution code is runnable and produces a
-        # (currently meaningless) visualization.
         preds = []
-        for x in X_pred:
-            z = np.cos(x ** 2).sum()
-            preds.append(1 + np.sign(z) * (np.abs(z) > 0.3))
+        def __dist(ind1, ind2):
+            return ((self.X[ind1][0] - X_pred[ind2][0]) / 3) ** 2 + (self.X[ind1][1] - X_pred[ind2][1]) ** 2
+
+        N = len(self.X)
+        for j in range(len(X_pred)):
+            classes = []
+            dists = []
+
+            for i in range(N):
+                dists.append((self.X[i], __dist(i, j), self.y[i]))
+
+            dists.sort(key=lambda x:x[1])
+            
+            for j in range(self.K):
+                classes.append(dists[j][2])
+
+            preds.append(max(set(classes), key=classes.count))
+
+        print("results for k=" + str(self.K) + " done")
         return np.array(preds)
 
     # In KNN, "fitting" can be as simple as storing the data, so this has been written for you
