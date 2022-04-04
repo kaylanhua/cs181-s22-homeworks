@@ -25,7 +25,7 @@ class KMeans(object):
         self.clusters = [[] for _ in range(self.K)]
         self.errors = []
 
-    # X is a (N x 28 x 28) array where 28x28 is the dimensions of each of the N images.
+    # X is a (N x 784) array since the dimension of each image is 28x28.
     def fit(self, X):
         errors = []
 
@@ -81,6 +81,7 @@ class HAC(object):
         self.means = {}
         self.final = {} # cluster final
     
+    # X is a (N x 784) array since the dimension of each image is 28x28.
     def fit(self, X):
         print("hi fit")
         N = len(X)
